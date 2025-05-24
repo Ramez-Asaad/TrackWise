@@ -126,36 +126,58 @@ select[multiple] option {
 }
 
 /* Choices.js custom styles for better contrast */
-.choices__inner,
+.choices__inner {
+    background-color: #e0e0e0 !important;
+    color: #666 !important;
+    border-radius: 5px !important;
+    border: none !important;
+    font-size: 16px !important;
+    font-family: "Righteous", sans-serif !important;
+    padding: 12px !important;
+    min-height: 48px !important;
+    box-shadow: none !important;
+    margin-bottom: 10px !important;
+}
 .choices__list--dropdown,
 .choices__list[role='listbox'] {
-    background: #fff !important;
-    color: #111 !important;
+    background-color: #e0e0e0 !important;
+    color: #666 !important;
+    border-radius: 5px !important;
+    border: none !important;
+    font-size: 16px !important;
+    font-family: "Righteous", sans-serif !important;
+    box-shadow: 0 0 5px rgba(30, 58, 95, 0.1) !important;
 }
 .choices__item--selectable {
-    color: #111 !important;
+    color: #666 !important;
+    font-size: 16px !important;
+    font-family: "Righteous", sans-serif !important;
 }
 .choices__placeholder {
     color: #888 !important;
     font-style: italic;
+    font-size: 16px !important;
+    font-family: "Righteous", sans-serif !important;
 }
 .choices__list--dropdown .choices__item--selectable.is-highlighted {
-    background: #e0e0e0 !important;
-    color: #111 !important;
+    background: #d0d0d0 !important;
+    color: #1e3a5f !important;
 }
 .choices__list--dropdown .choices__item--selectable {
-    background: #fff !important;
-    color: #111 !important;
+    background: #e0e0e0 !important;
+    color: #666 !important;
 }
 .choices__item--choice {
-    color: #111 !important;
+    color: #666 !important;
 }
 .choices__list--multiple .choices__item {
     background: #e0e0e0 !important;
-    color: #111 !important;
-    border: 1px solid #1e3a5f !important;
+    color: #1e3a5f !important;
+    border: none !important;
     border-radius: 4px;
     margin: 2px 4px;
+    font-size: 16px !important;
+    font-family: "Righteous", sans-serif !important;
 }
 .choices[data-type*=select-multiple] .choices__button {
     color: #1e3a5f !important;
