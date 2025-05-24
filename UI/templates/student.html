@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/static/css/student.css">
+    <!-- Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, Student!</h2>
+        <form method="POST" action="/student_kbs">
+            <div class="input-field">
+                <label>CGPA</label>
+                <input type="number" step="0.01" name="cgpa" required>
+            </div>
+            <div class="input-field">
+                <label>Current Registered Credits</label>
+                <input type="number" name="current_credits" required>
+            </div>
+            <div class="input-field">
+                <label>Completed Courses</label>
+                <select id="completed_courses" name="completed_courses" multiple>
+                    {% for course in courses %}
+                        <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-field">
+                <label>Failed Courses</label>
+                <select id="failed_courses" name="failed_courses" multiple>
+                    {% for course in courses %}
+                        <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="button">Get Recommendations</button>
+        </form>
+        <div id="policy-feedback">
+            {% if policy_feedback %}
+                <h3>Policy Feedback & Recommendations:</h3>
+                <pre>{{ policy_feedback }}</pre>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script>
+        new Choices('#completed_courses', {
+            removeItemButton: true,
+            placeholder: true,
+            placeholderValue: 'Select completed courses...'
+        });
+        new Choices('#failed_courses', {
+            removeItemButton: true,
+            placeholder: true,
+            placeholderValue: 'Select failed courses...'
+        });
+    </script>
+</body>
+</html>

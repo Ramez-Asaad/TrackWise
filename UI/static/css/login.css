@@ -1,0 +1,264 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Righteous", sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10vh;
+}
+
+.container {
+  display: flex;
+  height: 80%;
+  width: 100%;
+  max-width: 1000px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.form-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+  background-color: #f5f5f5;
+}
+
+.sign-in {
+  left: 0;
+  z-index: 2;
+}
+
+.container.active .sign-in {
+  transform: translateX(100%);
+}
+
+.sign-up {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.container.active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: move 0.6s;
+}
+
+@keyframes move {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+.form-container h1 {
+  font-size: 36px;
+  color: #1e3a5f;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.form-container p {
+  font-size: 14px;
+  color: #1e3a5f;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.form-container a {
+  color: #1e3a5f;
+  font-size: 13px;
+  text-decoration: none;
+  margin: 15px 0 10px;
+}
+
+.input-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e0e0;
+  border-radius: 25px;
+  padding: 10px;
+  margin: 10px 0px 0px 40px;
+  width: 300px;
+}
+
+.input-field input {
+  border: none;
+  background: none;
+  outline: none;
+  flex: 1;
+  font-size: 16px;
+}
+
+.input-field i {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  color: #1e3a5f;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.radio-group label {
+  margin: 0 20px;
+  font-size: 16px;
+  color: #1e3a5f;
+  display: flex;
+  align-items: center;
+}
+
+input[type="radio"] {
+  accent-color: #1e3a5f;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.button {
+  background-color: #1e3a5f;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 50px;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 10px 0px 0px 90px;
+}
+
+.button-hidden {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 25px;
+  padding: 10px 50px;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 10px 5px 0px 0px;
+}
+
+.button-hidden:hover {
+  background-color: white;
+  color: #1e3a5f;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.toggle-container {
+  width: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out;
+  border-radius: 20px;
+  z-index: 1000;
+}
+
+.container.active .toggle-container {
+  transform: translateX(-100%);
+  border-radius: 20px;
+}
+
+.toggle {
+  background-color: #1e3a5f;
+  background-image: url("https://i.imgur.com/xyz123.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  color: white;
+  position: relative;
+  left: -100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.container.active .toggle {
+  transform: translateX(50%);
+}
+
+.toggle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  text-align: center;
+  top: 0;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.toggle-panel h1 {
+  font-size: 48px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.toggle-panel p {
+  font-size: 24px;
+  color: white;
+  margin: 5px 0;
+}
+
+.toggle-left {
+  transform: translateX(-200%);
+}
+
+.container.active .toggle-left {
+  transform: translateX(0);
+}
+
+.toggle-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.container.active .toggle-right {
+  transform: translateX(200%);
+}
+.error {
+  color: red;
+  font-size: 12px;
+  margin: 5px 0;
+  display: none;
+  text-align: left;
+  width: 280px;
+}
