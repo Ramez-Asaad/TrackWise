@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Course Advisor</title>
     <link rel="stylesheet" href="/static/css/student.css">
     <!-- Choices.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 </head>
 <body>
     <div class="container">
-        <h2>Welcome, Student!</h2>
+        <h2 style="text-align:center; font-family: 'Righteous', sans-serif; font-size: 2.5rem; margin-bottom: 30px;">Course Advisor</h2>
         <form method="POST" action="/student_kbs">
             <div class="input-field">
-                <label>CGPA</label>
-                <input type="number" step="0.01" name="cgpa" required>
+                <label for="semester">Current Semester</label>
+                <select id="semester" name="semester" required>
+                    <option value="" disabled selected>Choose your current semester</option>
+                    <option value="Fall">Fall</option>
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                </select>
             </div>
             <div class="input-field">
-                <label>Current Registered Credits</label>
-                <input type="number" name="current_credits" required>
+                <label for="cgpa">CGPA</label>
+                <input type="number" step="0.01" name="cgpa" id="cgpa" placeholder="Enter your CGPA" required>
             </div>
             <div class="input-field">
-                <label>Completed Courses</label>
+                <label for="completed_courses">Passed Courses</label>
                 <select id="completed_courses" name="completed_courses" multiple>
                     {% for course in courses %}
                         <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
@@ -29,7 +34,7 @@
                 </select>
             </div>
             <div class="input-field">
-                <label>Failed Courses</label>
+                <label for="failed_courses">Failed Courses</label>
                 <select id="failed_courses" name="failed_courses" multiple>
                     {% for course in courses %}
                         <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
@@ -51,12 +56,12 @@
         new Choices('#completed_courses', {
             removeItemButton: true,
             placeholder: true,
-            placeholderValue: 'Select completed courses...'
+            placeholderValue: 'Choose your Passed Courses'
         });
         new Choices('#failed_courses', {
             removeItemButton: true,
             placeholder: true,
-            placeholderValue: 'Select failed courses...'
+            placeholderValue: 'Choose your Failed Courses'
         });
     </script>
 </body>
