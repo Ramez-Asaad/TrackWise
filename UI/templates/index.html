@@ -6,8 +6,19 @@
     <title>TrackWise - Sign Up / Sign In</title>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/login.css">
+    <style>
+        .logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: auto;
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
+    <img src="../static/images/logo.png" alt="TrackWise Logo" class="logo">
     <div class="container" id="container">
         <div class="form-container sign-up" id="signupContainer">
             <form id="signupForm" action="/signup" method="POST">

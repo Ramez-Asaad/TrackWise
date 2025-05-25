@@ -118,6 +118,7 @@ class CourseRecommender(KnowledgeEngine):
         self.language_course_recommended = False
         self.university_requirements_count = 0
         self.explanations = []  # Track explanations for recommendations
+        self.validation_errors = []  # Track validation errors
 
     def reset(self):
         """Reset the engine state"""
@@ -128,6 +129,7 @@ class CourseRecommender(KnowledgeEngine):
         self.language_course_recommended = False
         self.university_requirements_count = 0
         self.explanations = []
+        self.validation_errors = []
 
     def add_explanation(self, course_code: str, rule_name: str, reason: str):
         """Add an explanation for a course recommendation"""
@@ -136,6 +138,71 @@ class CourseRecommender(KnowledgeEngine):
             'rule': rule_name,
             'reason': reason
         })
+
+    def add_validation_error(self, error_type: str, details: str):
+        """Add a validation error"""
+        self.validation_errors.append({
+            'type': error_type,
+            'details': details
+        })
+
+    def validate_course_lists(self, passed_courses: List[str], failed_courses: List[str]) -> bool:
+        """Validate course lists for logical consistency"""
+        # Check for courses that appear in both passed and failed lists
+        duplicate_courses = set(passed_courses) & set(failed_courses)
+        if duplicate_courses:
+            self.add_validation_error(
+                'duplicate_courses',
+                f"Course(s) {', '.join(duplicate_courses)} cannot be both passed and failed"
+            )
+            return False
+        return True
+
+    def validate_prerequisites_chain(self, course_lookup: Dict[str, Dict], passed_courses: List[str]) -> bool:
+        """Validate that prerequisites chain is logically consistent"""
+        valid = True
+        for course_code, course_info in course_lookup.items():
+            if course_code in passed_courses:
+                prereqs = course_info['prerequisites']
+                if isinstance(prereqs, list) and prereqs:
+                    missing_prereqs = [p for p in prereqs if p not in passed_courses]
+                    if missing_prereqs:
+                        self.add_validation_error(
+                            'missing_prerequisites',
+                            f"Course {course_code} is marked as passed but its prerequisites {', '.join(missing_prereqs)} are not"
+                        )
+                        valid = False
+        return valid
+
+    def validate_credit_hours(self, course_lookup: Dict[str, Dict], passed_courses: List[str]) -> bool:
+        """Validate that total passed credits is within reasonable bounds"""
+        total_credits = sum(course_lookup[code]['credit_hours'] for code in passed_courses if code in course_lookup)
+        max_possible_credits = len(STUDY_PLAN) * 2 * 21  # 4 years * 2 semesters * max credits per semester
+        if total_credits > max_possible_credits:
+            self.add_validation_error(
+                'excessive_credits',
+                f"Total passed credits ({total_credits}) exceeds maximum possible credits ({max_possible_credits})"
+            )
+            return False
+        return True
+
+    def validate_language_progression(self, passed_courses: List[str]) -> bool:
+        """Validate that language courses are taken in correct order"""
+        valid = True
+        # Check English language progression
+        if 'LAN022' in passed_courses and 'LAN021' not in passed_courses:
+            self.add_validation_error(
+                'invalid_language_progression',
+                "English Language 1 (LAN022) is passed but English Language 0 (LAN021) is not"
+            )
+            valid = False
+        if 'LAN111' in passed_courses and 'LAN022' not in passed_courses:
+            self.add_validation_error(
+                'invalid_language_progression',
+                "English Language 2 (LAN111) is passed but English Language 1 (LAN022) is not"
+            )
+            valid = False
+        return valid
 
     def can_recommend_language_course(self, course_code: str) -> bool:
         """Check if a language course can be recommended"""
@@ -447,6 +514,23 @@ def get_course_recommendations(
     """Gets course recommendations based on student information"""
     engine = CourseRecommender()
     
+    # Load courses from CSV
+    courses = load_courses_from_csv(csv_path)
+    course_lookup = {course['course_code']: course for course in courses}
+    
+    # Validate input data
+    validation_passed = True
+    validation_passed &= engine.validate_course_lists(passed_courses, failed_courses)
+    validation_passed &= engine.validate_prerequisites_chain(course_lookup, passed_courses)
+    validation_passed &= engine.validate_credit_hours(course_lookup, passed_courses)
+    validation_passed &= engine.validate_language_progression(passed_courses)
+    
+    if not validation_passed:
+        return {
+            'error': 'Validation failed',
+            'validation_errors': engine.validation_errors
+        }
+    
     # Calculate academic year if not provided
     if academic_year is None:
         total_passed = len(passed_courses)
@@ -458,10 +542,6 @@ def get_course_recommendations(
             academic_year = 3
         else:
             academic_year = 4
-    
-    # Load courses from CSV
-    courses = load_courses_from_csv(csv_path)
-    course_lookup = {course['course_code']: course for course in courses}
     
     # Declare student facts
     engine.declare(Student(
