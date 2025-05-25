@@ -172,10 +172,11 @@ The system includes comprehensive course data for the AI Science track including
 ## 👥 Team
 
 - **Muhammed Mustafa**
-- **Ramez Asaad** 
+- **Ramez Asaad**
+- **Noureen Muhammed**
 - **Rodina Mohamed**
 - **Aya Mamdouh**
-- **Noureen Muhammed**
+  
 
 ## 📄 License
 
