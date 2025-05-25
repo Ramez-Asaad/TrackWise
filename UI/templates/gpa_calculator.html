@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackWise - GPA Calculator</title>
+    <link rel="stylesheet" href="/static/css/student.css">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- jQuery UI for autocomplete -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+        .gpa-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1e3a5f;
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .course-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        
+        .course-row .input-field {
+            flex: 1;
+            min-width: 150px;
+            margin: 0;
+        }
+        
+        .course-row .input-field label {
+            color: #1e3a5f;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .course-row select,
+        .course-row input {
+            padding: 8px;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        
+        .course-row input[readonly] {
+            background-color: #f5f5f5;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .course-input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            font-size: 14px;
+            font-family: "Righteous", sans-serif;
+            color: #666;
+            box-sizing: border-box;
+            margin-bottom: 0;
+        }
+        
+        .course-input:focus {
+            background-color: #d0d0d0;
+            box-shadow: 0 0 5px rgba(30, 58, 95, 0.5);
+            outline: none;
+        }
+        
+        /* jQuery UI autocomplete styling */
+        .ui-autocomplete {
+            background-color: #e0e0e0 !important;
+            border: none !important;
+            border-radius: 5px !important;
+            font-family: "Righteous", sans-serif !important;
+            font-size: 14px !important;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .ui-autocomplete .ui-menu-item {
+            padding: 8px 12px !important;
+            color: #666 !important;
+            border-bottom: 1px solid rgba(102, 102, 102, 0.1);
+        }
+        
+        .ui-autocomplete .ui-menu-item:hover,
+        .ui-autocomplete .ui-state-focus {
+            background-color: #d0d0d0 !important;
+            color: #1e3a5f !important;
+            border: none !important;
+        }
+        
+        .add-course-btn {
+            background-color: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: "Righteous", sans-serif;
+            height: fit-content;
+        }
+        
+        .add-course-btn:hover {
+            background-color: #2a4a6f;
+        }
+        
+        .remove-course-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            height: fit-content;
+        }
+        
+        .remove-course-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .gpa-result {
+            background-color: #1e3a5f;
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .gpa-display {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #FFD700;
+        }
+        
+        .gpa-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .gpa-detail-item {
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .gpa-detail-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        
+        .course-details-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .course-details-table th,
+        .course-details-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .course-details-table th {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+        
+        .course-details-table td:nth-child(4),
+        .course-details-table td:nth-child(5),
+        .course-details-table td:nth-child(6),
+        .course-details-table th:nth-child(4),
+        .course-details-table th:nth-child(5),
+        .course-details-table th:nth-child(6) {
+            text-align: right;
+        }
+        
+        .back-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+            font-family: "Righteous", sans-serif;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .grade-legend {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .grade-legend h4 {
+            margin-top: 0;
+            color: #FFD700;
+        }
+        
+        .grade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .grade-item {
+            text-align: center;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body style="font-family: 'Poppins', sans-serif;">
+    <div class="container">
+        <h2 style="text-align:center; font-family: 'Righteous', sans-serif; font-size: 2.5rem; margin-bottom: 30px;">
+            <i class="fas fa-calculator"></i> TrackWise GPA Calculator
+        </h2>
+        
+        {% if not gpa_result %}
+        <!-- GPA Calculator Form -->
+        <div class="gpa-container">
+            <button class="back-button" onclick="window.location.href='/student_dashboard'">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+            
+            <form method="POST" action="/gpa_calculator" id="gpa-form">
+                <div id="courses-container">
+                    <!-- Initial course row -->
+                    <div class="course-row">
+                        <div class="input-field">
+                            <label for="course_codes_0"><i class="fas fa-book"></i> Course</label>
+                            <input type="text" name="course_codes" id="course_codes_0" class="course-input"
+                                   placeholder="Type course code or name..." data-credits="">
+                            <input type="hidden" name="course_codes_hidden" id="course_codes_0_hidden">
+                        </div>
+                        
+                        <div class="input-field">
+                            <label for="grades_0"><i class="fas fa-star"></i> Grade</label>
+                            <select name="grades" id="grades_0">
+                                <option value="">Select grade</option>
+                                {% for grade, points in grade_points.items() %}
+                                    <option value="{{ grade }}">{{ grade }} ({{ points }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="input-field">
+                            <label for="credit_hours_0"><i class="fas fa-clock"></i> Credits</label>
+                            <input type="number" name="credit_hours" id="credit_hours_0" 
+                                   placeholder="Select course first" step="0.5" min="0" max="6" readonly>
+                        </div>
+                        
+                        <button type="button" class="add-course-btn" onclick="addCourseRow()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="button">
+                    <i class="fas fa-calculator"></i> Calculate GPA
+                </button>
+            </form>
+            
+            <!-- Grade Legend -->
+            <div class="grade-legend">
+                <h4><i class="fas fa-info-circle"></i> Grade Point Scale</h4>
+                <div class="grade-grid">
+                    {% for grade, points in grade_points.items() %}
+                        <div class="grade-item">
+                            <strong>{{ grade }}</strong><br>{{ points }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if gpa_result %}
+        <!-- GPA Results Display -->
+        <div class="gpa-result">
+            <button class="back-button" onclick="window.location.href='/gpa_calculator'">
+                <i class="fas fa-arrow-left"></i> Calculate Again
+            </button>
+            
+            <h3><i class="fas fa-trophy"></i> Your GPA Results</h3>
+            
+            <div class="gpa-display">{{ gpa_result.gpa }}</div>
+            
+            <div class="gpa-details">
+                <div class="gpa-detail-item">
+                    <div class="gpa-detail-value">{{ gpa_result.total_credits }}</div>
+                    <div>Total Credits</div>
+                </div>
+                <div class="gpa-detail-item">
+                    <div class="gpa-detail-value">{{ gpa_result.total_grade_points }}</div>
+                    <div>Total Grade Points</div>
+                </div>
+                <div class="gpa-detail-item">
+                    <div class="gpa-detail-value">{{ gpa_result.course_details|length }}</div>
+                    <div>Courses</div>
+                </div>
+            </div>
+            
+            {% if gpa_result.course_details %}
+            <table class="course-details-table">
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Grade</th>
+                        <th>Credits</th>
+                        <th>Grade Points</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in gpa_result.course_details %}
+                    <tr>
+                        <td>{{ course.course_code }}</td>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.grade }}</td>
+                        <td>{{ course.credit_hours }}</td>
+                        <td>{{ course.grade_points }}</td>
+                        <td>{{ course.total_points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Pass courses data to JavaScript -->
+    <script type="application/json" id="courses-data">
+        {{ courses | tojson }}
+    </script>
+    
+    <!-- Pass grade points data to JavaScript -->
+    <script type="application/json" id="grade-points-data">
+        {{ grade_points | tojson }}
+    </script>
+
+    <script>
+        let courseCount = 1;
+        let coursesData = [];
+        let gradePointsData = {};
+        let selectedCourses = [];
+        
+        // Load data from JSON script tags
+        document.addEventListener('DOMContentLoaded', function() {
+            const coursesJson = document.getElementById('courses-data').textContent;
+            const gradePointsJson = document.getElementById('grade-points-data').textContent;
+            
+            const courses = JSON.parse(coursesJson);
+            gradePointsData = JSON.parse(gradePointsJson);
+            
+            // Transform courses data for autocomplete
+            coursesData = courses.map(course => ({
+                code: course.course_code,
+                name: course.course_name,
+                credits: course.credit_hours,
+                label: course.course_code + " - " + course.course_name,
+                value: course.course_code
+            }));
+            
+            // Initialize autocomplete for the first input
+            initializeAutocomplete('course_codes_0', 0);
+        });
+        
+        function initializeAutocomplete(inputId, index) {
+            const input = document.getElementById(inputId);
+            
+            $(input).autocomplete({
+                source: function(request, response) {
+                    const term = request.term.toLowerCase();
+                    const filtered = coursesData.filter(course => 
+                        !selectedCourses.includes(course.code) &&
+                        (course.code.toLowerCase().includes(term) || 
+                         course.name.toLowerCase().includes(term))
+                    );
+                    response(filtered);
+                },
+                select: function(event, ui) {
+                    const courseCode = ui.item.value;
+                    const credits = ui.item.credits;
+                    
+                    // Update the input with the selected course
+                    input.value = ui.item.label;
+                    input.dataset.credits = credits;
+                    document.getElementById(inputId + '_hidden').value = courseCode;
+                    
+                    // Add to selected courses
+                    selectedCourses.push(courseCode);
+                    
+                    // Update credits
+                    updateCredits(index);
+                    
+                    // Refresh all autocomplete sources
+                    refreshAllAutocomplete();
+                    
+                    return false;
+                },
+                change: function(event, ui) {
+                    // If the input is cleared or changed to invalid value
+                    if (!ui.item) {
+                        const hiddenInput = document.getElementById(inputId + '_hidden');
+                        const oldCourseCode = hiddenInput.value;
+                        
+                        // Remove from selected courses
+                        if (oldCourseCode) {
+                            selectedCourses = selectedCourses.filter(code => code !== oldCourseCode);
+                        }
+                        
+                        // Clear the fields
+                        input.value = '';
+                        input.dataset.credits = '';
+                        hiddenInput.value = '';
+                        
+                        // Clear credits
+                        updateCredits(index);
+                        
+                        // Refresh all autocomplete sources
+                        refreshAllAutocomplete();
+                    }
+                },
+                minLength: 1
+            });
+        }
+        
+        function refreshAllAutocomplete() {
+            const courseInputs = document.querySelectorAll('.course-input');
+            courseInputs.forEach(input => {
+                if ($(input).hasClass('ui-autocomplete-input')) {
+                    $(input).autocomplete('option', 'source', function(request, response) {
+                        const term = request.term.toLowerCase();
+                        const filtered = coursesData.filter(course => 
+                            !selectedCourses.includes(course.code) &&
+                            (course.code.toLowerCase().includes(term) || 
+                             course.name.toLowerCase().includes(term))
+                        );
+                        response(filtered);
+                    });
+                }
+            });
+        }
+        
+        function addCourseRow() {
+            const container = document.getElementById('courses-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'course-row';
+            
+            // Generate grade options dynamically
+            let gradeOptionsHTML = '<option value="">Select grade</option>';
+            for (const [grade, points] of Object.entries(gradePointsData)) {
+                gradeOptionsHTML += `<option value="${grade}">${grade} (${points})</option>`;
+            }
+            
+            newRow.innerHTML = `
+                <div class="input-field">
+                    <label for="course_codes_${courseCount}"><i class="fas fa-book"></i> Course</label>
+                    <input type="text" name="course_codes" id="course_codes_${courseCount}" class="course-input"
+                           placeholder="Type course code or name..." data-credits="">
+                    <input type="hidden" name="course_codes_hidden" id="course_codes_${courseCount}_hidden">
+                </div>
+                
+                <div class="input-field">
+                    <label for="grades_${courseCount}"><i class="fas fa-star"></i> Grade</label>
+                    <select name="grades" id="grades_${courseCount}">
+                        ${gradeOptionsHTML}
+                    </select>
+                </div>
+                
+                <div class="input-field">
+                    <label for="credit_hours_${courseCount}"><i class="fas fa-clock"></i> Credits</label>
+                    <input type="number" name="credit_hours" id="credit_hours_${courseCount}" 
+                           placeholder="Select course first" step="0.5" min="0" max="6" readonly>
+                </div>
+                
+                <button type="button" class="remove-course-btn" onclick="removeCourseRow(this, ${courseCount})">
+                    <i class="fas fa-minus"></i>
+                </button>
+            `;
+            container.appendChild(newRow);
+            
+            // Initialize autocomplete for the new input
+            initializeAutocomplete(`course_codes_${courseCount}`, courseCount);
+            
+            courseCount++;
+        }
+        
+        function removeCourseRow(button, index) {
+            const row = button.parentElement;
+            const hiddenInput = document.getElementById(`course_codes_${index}_hidden`);
+            const courseCode = hiddenInput.value;
+            
+            // Remove from selected courses
+            if (courseCode) {
+                selectedCourses = selectedCourses.filter(code => code !== courseCode);
+            }
+            
+            // Remove the row
+            row.remove();
+            
+            // Refresh all autocomplete sources
+            refreshAllAutocomplete();
+        }
+        
+        function updateCredits(index) {
+            const courseInput = document.getElementById(`course_codes_${index}`);
+            const creditsInput = document.getElementById(`credit_hours_${index}`);
+            const credits = courseInput.dataset.credits;
+            
+            if (credits && credits !== '') {
+                creditsInput.value = credits;
+                creditsInput.style.backgroundColor = '#e0e0e0';
+            } else {
+                creditsInput.value = '';
+                creditsInput.style.backgroundColor = '#f5f5f5';
+            }
+        }
+        
+        // Form submission handler to use hidden values
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('gpa-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Update the visible inputs with hidden values before submission
+                    const hiddenInputs = document.querySelectorAll('input[name="course_codes_hidden"]');
+                    const visibleInputs = document.querySelectorAll('input[name="course_codes"]');
+                    
+                    hiddenInputs.forEach((hidden, index) => {
+                        if (hidden.value && visibleInputs[index]) {
+                            visibleInputs[index].value = hidden.value;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

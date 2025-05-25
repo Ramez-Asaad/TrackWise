@@ -10,7 +10,38 @@ body {
   align-items: center;
   width: 100%;
 }
-select{
+.container {
+  padding: 30px;
+  background-color: #1e3a5f;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  height: 80vh;
+  overflow-y: auto;
+}
+h2 {
+  text-align: center;
+  font-family: "Righteous", sans-serif;
+  font-size: 35px;
+  margin-bottom: 20px;
+  position: relative;
+  top: 10px;
+}
+.input-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom:20px;
+}
+.input-field {
+  margin: 0 px 20px 10px;
+}
+.input-field label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: white;
+}
+.input-field select {
   width: 100%;
   padding: 12px;
   border: none;
@@ -29,48 +60,12 @@ select{
   transition: background-color 0.3s;
   margin-bottom: 10px;
 }
-.container {
-  padding: 30px;
-  background-color: #1e3a5f;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  width: 80%;
-  height: 80vh;
-  overflow-y: auto;
+.input-field select:hover {
+  background-color: #d0d0d0;
 }
-h2 {
-  text-align: center;
-  font-family: "Righteous", sans-serif;
-  font-size: 35px;
-  margin-bottom: 20px;
-  position: relative;
-  top: 10px;
-}
-.header img {
-  display: block;
-  margin: 0 auto 20px;
-  width: 100px;
-}
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-.input-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-.input-field {
-  flex: 1;
-  margin: 0 10px;
-}
-.input-field label {
-  display: block;
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: white;
+.input-field select:focus {
+  background-color: #d0d0d0;
+  box-shadow: 0 0 5px rgba(30, 58, 95, 0.5);
 }
 .input-field input {
   width: 100%;
@@ -105,38 +100,4 @@ h2 {
 }
 .button:hover {
   background-color: #d0d0d0;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-table,
-th,
-td {
-  border: 1px solid #e0e0e0;
-}
-th,
-td {
-  padding: 10px;
-  text-align: left;
-}
-th {
-  background-color: #34495e;
-  color: #e0e0e0;
-  font-family: "Righteous", sans-serif;
-}
-td {
-  background-color: #2c3e50;
-  color: #e0e0e0;
-  font-family: "Righteous", sans-serif;
-}
-.recent {
-  background-color: #e0f7fa;
-} /* Highlight recently modified courses */
-.message {
-  color: green;
-}
-.error {
-  color: red;
 }

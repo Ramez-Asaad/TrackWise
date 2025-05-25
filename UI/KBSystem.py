@@ -55,6 +55,7 @@ class KBSystem(KnowledgeEngine):
         missing = [p for p in prereqs if p.strip() not in completed]
         self.output.append(f"Cannot register for {code}: missing prerequisites {missing}")
 
+
 def load_courses_from_csv(csv_path):
     # Always resolve the path relative to this file's directory
     base_dir = os.path.dirname(os.path.abspath(__file__))
