@@ -114,7 +114,7 @@ class CourseRecommender(KnowledgeEngine):
         super().__init__()
         self.recommended_courses = []
         self.total_credits = 0
-        self.max_credits = 0
+        self.max_credits = 21  # Default max credits
         self.language_course_recommended = False
         self.university_requirements_count = 0
         self.explanations = []  # Track explanations for recommendations
@@ -125,7 +125,7 @@ class CourseRecommender(KnowledgeEngine):
         super().reset()
         self.recommended_courses = []
         self.total_credits = 0
-        self.max_credits = 0
+        self.max_credits = 21  # Default max credits
         self.language_course_recommended = False
         self.university_requirements_count = 0
         self.explanations = []
@@ -241,6 +241,8 @@ class CourseRecommender(KnowledgeEngine):
             self.max_credits = 15
         else:
             self.max_credits = 12
+        self.add_explanation("N/A", "Credit Limit", 
+            f"Based on your CGPA of {cgpa:.2f}, your maximum credit limit is set to {self.max_credits} credits.")
 
     @Rule(
         Student(
@@ -543,7 +545,10 @@ def get_course_recommendations(
         else:
             academic_year = 4
     
-    # Declare student facts
+    # Reset the engine
+    engine.reset()
+    
+    # Declare student facts with all required fields
     engine.declare(Student(
         cgpa=student_cgpa,
         passed_courses=passed_courses,
