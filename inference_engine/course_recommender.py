@@ -1,6 +1,16 @@
 from experta import *
 import pandas as pd
 from typing import List, Dict, Set
+import sys
+import os
+
+# Add the UI directory to the path
+current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ui_dir = os.path.join(current_dir, 'UI')
+if ui_dir not in sys.path:
+    sys.path.insert(0, ui_dir)
+
+from course_db import get_all_courses
 
 # Study plan mapping for course prioritization
 STUDY_PLAN = {
@@ -472,38 +482,9 @@ class CourseRecommender(KnowledgeEngine):
                     self.add_explanation(code, "Elective Course", 
                         f"Recommended {code} as an elective course from the {category.replace('_', ' ').title()} category.")
 
-def load_courses_from_csv(csv_path: str) -> List[Dict]:
-    """Loads course data from CSV file"""
-    df = pd.read_csv(csv_path)
-    courses = []
-    for _, row in df.iterrows():
-        # Clean up prerequisites and corequisites
-        prereqs_str = str(row['prerequisites']) if pd.notna(row['prerequisites']) else ""
-        coreqs_str = str(row['corequisites']) if pd.notna(row['corequisites']) else ""
-        
-        # Parse prerequisites
-        if prereqs_str == "No Prerequisites" or prereqs_str == "nan":
-            prerequisites = []
-        else:
-            prerequisites = [p.strip() for p in prereqs_str.split(',') if p.strip()]
-        
-        # Parse corequisites
-        if coreqs_str == "nan" or not coreqs_str.strip():
-            corequisites = []
-        else:
-            corequisites = [c.strip() for c in coreqs_str.split(',') if c.strip()]
-        
-        course = {
-            'course_code': row['course_code'],
-            'course_name': row['course_name'],
-            'description': str(row['description']) if pd.notna(row['description']) else "",
-            'prerequisites': prerequisites,
-            'corequisites': corequisites,
-            'credit_hours': int(row['credit_hours']),
-            'semester_offered': row['semester_offered']
-        }
-        courses.append(course)
-    return courses
+def load_courses_from_csv(csv_path: str = None) -> List[Dict]:
+    """Loads course data from database"""
+    return get_all_courses()
 
 def get_course_recommendations(
     student_cgpa: float,

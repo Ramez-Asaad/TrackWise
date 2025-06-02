@@ -16,6 +16,7 @@ from UI.KBSystem import kbsystem_bp
 from UI.inference_engine import inference_engine_bp
 from UI.gpa_calculator import gpa_calculator_bp
 from UI.DB import init_db
+from UI.course_db import init_course_collection, migrate_courses_from_csv
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
@@ -23,6 +24,11 @@ app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
 # Initialize the database
 with app.app_context():
     init_db()
+    init_course_collection()
+    # Migrate courses from CSV to database if needed
+    csv_path = os.path.join(os.path.dirname(__file__), "Data.csv")
+    if os.path.exists(csv_path):
+        migrate_courses_from_csv(csv_path)
 
 # Register blueprints
 app.register_blueprint(client_bp)
