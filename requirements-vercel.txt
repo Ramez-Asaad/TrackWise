@@ -1,9 +1,9 @@
 frozendict==2.3.8
 experta==1.9.4
-pandas
-numpy
 Flask==2.0.1
 Werkzeug==2.0.1
 gunicorn==21.2.0
 pymongo[srv]==4.6.1
-python-dotenv==1.0.0 
+python-dotenv==1.0.0
+pandas
+numpy 
