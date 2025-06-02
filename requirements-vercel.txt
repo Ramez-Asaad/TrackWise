@@ -1,5 +1,4 @@
-frozendict==2.3.8
-experta
+experta==1.9.4
 Flask==2.0.1
 Werkzeug==2.0.1
 gunicorn==21.2.0

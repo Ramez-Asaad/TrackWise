@@ -1,4 +1,3 @@
-frozendict==2.3.8
 experta
 pandas
 numpy
