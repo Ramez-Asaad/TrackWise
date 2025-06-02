@@ -4,11 +4,12 @@ body {
   padding: 20px;
   background-color: #1e3a5f;
   color: #e0e0e0;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
 }
 .container {
   padding: 30px;
@@ -16,8 +17,10 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   width: 80%;
+  max-width: 1200px;
   height: 80vh;
   overflow-y: auto;
+  position: relative;
 }
 h2 {
   text-align: center;
@@ -33,7 +36,7 @@ h2 {
   margin-bottom:20px;
 }
 .input-field {
-  margin: 0 px 20px 10px;
+  margin: 0 0 20px;
 }
 .input-field label {
   display: block;
@@ -100,4 +103,131 @@ h2 {
 }
 .button:hover {
   background-color: #d0d0d0;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    width: 95%;
+    padding: 15px;
+    height: auto;
+    min-height: 85vh;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .input-field {
+    margin: 0 0 15px;
+  }
+
+  .input-field label {
+    font-size: 14px;
+  }
+
+  .input-field select,
+  .input-field input {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .button {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  /* Choices.js mobile optimization */
+  .choices {
+    margin-bottom: 15px !important;
+  }
+
+  .choices__inner {
+    min-height: 44px !important;
+    padding: 6px !important;
+  }
+
+  .choices__input {
+    font-size: 14px !important;
+  }
+
+  .choices__list--dropdown {
+    max-height: 200px !important;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .logo {
+    width: 100px !important;
+    top: 10px !important;
+    left: 10px !important;
+  }
+
+  .student-info {
+    flex-direction: column !important;
+  }
+
+  .info-item {
+    width: 100% !important;
+    margin: 5px 0 !important;
+  }
+
+  .recommendation-card {
+    padding: 15px !important;
+  }
+
+  .course-code {
+    font-size: 1em !important;
+  }
+
+  .course-name {
+    font-size: 0.9em !important;
+  }
+
+  .credit-badge,
+  .year-badge,
+  .failed-badge {
+    font-size: 0.8em !important;
+    padding: 4px 8px !important;
+  }
+
+  .course-details {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .explanation-summary {
+    flex-direction: column !important;
+  }
+
+  .summary-item {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* Fix for iOS Safari 100vh issue */
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: -webkit-fill-available;
+  }
+  .container {
+    min-height: -webkit-fill-available;
+  }
 }
