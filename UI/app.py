@@ -4,10 +4,15 @@ from KBEditor import kbeditor_bp
 from KBSystem import kbsystem_bp
 from inference_engine import inference_engine_bp
 from gpa_calculator import gpa_calculator_bp
+from DB import init_db
 import os
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+
+# Initialize the database
+with app.app_context():
+    init_db()
 
 # Register blueprints
 app.register_blueprint(client_bp)
