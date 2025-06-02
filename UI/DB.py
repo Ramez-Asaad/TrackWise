@@ -1,14 +1,30 @@
-import mysql.connector
-from mysql.connector import Error
+import psycopg2
+from psycopg2 import Error
 from werkzeug.security import generate_password_hash, check_password_hash
+from .config import DATABASE_URL, SSL_MODE
 
 def get_db_connection():
-    return mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
-        password="1234",
-        database="kbsystem"
-    )
+    return psycopg2.connect(DATABASE_URL, sslmode=SSL_MODE)
+
+def init_db():
+    """Initialize the database with required tables"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Create users table if it doesn't exist
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(255) UNIQUE NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            userType VARCHAR(50) NOT NULL
+        )
+    """)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 def create_user(username, email, password, userType):
     try:
@@ -24,19 +40,29 @@ def create_user(username, email, password, userType):
         print("User created:", username, email, userType)  # Debug print
         return True, "Signup successful! Please log in."
     except Error as e:
-        print("MySQL Error:", e)  # Debug print
+        print("Database Error:", e)  # Debug print
         return False, str(e)
 
 def get_user_by_email(email):
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, username, email, password, userType FROM users WHERE email=%s", (email,))
         user = cursor.fetchone()
         cursor.close()
         conn.close()
-        return user
+        
+        if user:
+            return {
+                'id': user[0],
+                'username': user[1],
+                'email': user[2],
+                'password': user[3],
+                'userType': user[4]
+            }
+        return None
     except Error as e:
+        print("Database Error:", e)
         return None
 
 def check_user_credentials(email, password, userType):
@@ -55,4 +81,5 @@ def user_exists(username, email):
         conn.close()
         return exists
     except Error as e:
+        print("Database Error:", e)
         return False 
