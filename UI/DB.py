@@ -1,5 +1,6 @@
 import os
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 from werkzeug.security import generate_password_hash, check_password_hash
 import time
 
@@ -10,19 +11,15 @@ def get_db_client():
     
     for attempt in range(max_retries):
         try:
-            # Try to get MongoDB URI from environment, fallback to in-memory mode for development
-            mongodb_uri = os.getenv('MONGODB_URI')
-            if not mongodb_uri:
-                # For development/testing, use a simple in-memory dict-based storage
-                if not hasattr(get_db_client, '_mock_db'):
-                    get_db_client._mock_db = {
-                        'users': {}
-                    }
-                return None  # Signal to use in-memory storage
+            # MongoDB Atlas URI
+            uri = "mongodb+srv://ramez:ramez@cluster0.jkciz4n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
             
-            client = MongoClient(mongodb_uri)
+            # Create a new client and connect to the server with ServerApi configuration
+            client = MongoClient(uri, server_api=ServerApi('1'))
+            
             # Test the connection
             client.admin.command('ping')
+            print("Successfully connected to MongoDB Atlas!")
             return client
             
         except Exception as e:
@@ -30,7 +27,8 @@ def get_db_client():
                 print(f"MongoDB connection attempt {attempt + 1} failed. Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)
             else:
-                print("Failed to connect to MongoDB, falling back to in-memory storage")
+                print(f"Failed to connect to MongoDB: {str(e)}")
+                print("Falling back to in-memory storage")
                 if not hasattr(get_db_client, '_mock_db'):
                     get_db_client._mock_db = {
                         'users': {}
@@ -40,7 +38,8 @@ def get_db_client():
 # Initialize client
 client = get_db_client()
 if client:
-    db = client.get_default_database()
+    # Use the trackwise database
+    db = client['trackwise']
 else:
     db = None
 
