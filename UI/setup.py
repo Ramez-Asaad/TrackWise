@@ -1,12 +1,18 @@
 """
-Custom implementation of frozendict functionality needed by experta
+Setup module to handle all initialization before other imports
 """
+import sys
+import os
 from collections.abc import Mapping
 
+# Add the current directory to path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+# Create our frozendict implementation
 class frozendict(Mapping):
-    """
-    An immutable wrapper around dictionaries
-    """
+    """An immutable wrapper around dictionaries"""
     def __init__(self, *args, **kwargs):
         self._dict = dict(*args, **kwargs)
         self._hash = None
@@ -33,7 +39,6 @@ class frozendict(Mapping):
     def __repr__(self):
         return f'frozendict({self._dict!r})'
 
-# Create the module-level functions that experta expects
 def freeze(obj):
     """Convert a mutable object to an immutable one"""
     if isinstance(obj, dict):
@@ -48,4 +53,12 @@ def unfreeze(obj):
         return dict((k, unfreeze(v)) for k, v in obj.items())
     elif isinstance(obj, tuple):
         return list(unfreeze(x) for x in obj)
-    return obj 
+    return obj
+
+# Create a fake frozendict module
+class FrozenDictModule:
+    def __init__(self):
+        self.frozendict = frozendict
+        
+# Install our fake frozendict module
+sys.modules['frozendict'] = FrozenDictModule() 

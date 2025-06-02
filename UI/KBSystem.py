@@ -1,13 +1,7 @@
-import sys
-import os
-from UI.experta_patch import patch_experta
-
-# Apply our patch before importing experta
-patch_experta()
-
 from experta import *
 import csv
 import io
+import os
 from flask import Blueprint, render_template, request
 
 kbsystem_bp = Blueprint('kbsystem', __name__)
