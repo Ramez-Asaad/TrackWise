@@ -384,6 +384,7 @@
             </div>
 
             <!-- Credit Summary -->
+            {% if recommendations and not recommendations.get('validation_errors') %}
             <div class="summary-card">
                 <h3><i class="fas fa-calculator"></i> Credit Summary</h3>
                 <p>{{ recommendations.credit_limit_reason }}</p>
@@ -393,8 +394,22 @@
                 <p><strong>{{ recommendations.total_credits }} / {{ recommendations.max_credits }} Credits</strong></p>
                 <p>{{ recommendations.max_credits - recommendations.total_credits }} credits remaining</p>
             </div>
+            {% endif %}
 
-            {% if recommendations.failed_recommendations %}
+            {% if recommendations.get('validation_errors') %}
+            <div class="summary-card" style="background: rgba(244, 67, 54, 0.15);">
+                <h3><i class="fas fa-exclamation-triangle" style="color: #f44336;"></i> Validation Errors</h3>
+                <ul style="list-style: none; padding: 0;">
+                    {% for error in recommendations.validation_errors %}
+                    <li style="margin: 10px 0;">
+                        <strong>{{ error.type|replace('_', ' ')|title }}:</strong> {{ error.details }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if recommendations.get('failed_recommendations') %}
             <!-- Failed Courses (High Priority) -->
             <div class="section-title">
                 <i class="fas fa-exclamation-triangle" style="color: #f44336;"></i>
@@ -425,7 +440,7 @@
             {% endfor %}
             {% endif %}
 
-            {% if recommendations.regular_recommendations %}
+            {% if recommendations.get('regular_recommendations') %}
             <!-- Regular Course Recommendations -->
             <div class="section-title">
                 <i class="fas fa-star" style="color: #FFD700;"></i>
@@ -456,7 +471,7 @@
             {% endfor %}
             {% endif %}
 
-            {% if not recommendations.detailed_recommendations %}
+            {% if not recommendations.get('detailed_recommendations') and not recommendations.get('validation_errors') %}
             <div class="no-recommendations">
                 <i class="fas fa-info-circle" style="font-size: 3em; margin-bottom: 20px;"></i>
                 <h3>No Courses Available</h3>
@@ -471,7 +486,7 @@
             {% endif %}
 
             <!-- New Explanation System -->
-            {% if recommendations.explanations %}
+            {% if recommendations.get('explanations') %}
             <div class="explanation-section">
                 <div class="section-title">
                     <i class="fas fa-lightbulb" style="color: #FFD700;"></i>
@@ -481,15 +496,15 @@
                     <div class="explanation-summary">
                         <div class="summary-item">
                             <i class="fas fa-book"></i>
-                            <span>Total Credits: {{ recommendations.total_credits }} / {{ recommendations.max_credits }}</span>
+                            <span>Total Credits: {{ recommendations.get('total_credits', 0) }} / {{ recommendations.get('max_credits', 0) }}</span>
                         </div>
                         <div class="summary-item">
                             <i class="fas fa-university"></i>
-                            <span>University Requirements: {{ recommendations.university_requirements_count }} / 2</span>
+                            <span>University Requirements: {{ recommendations.get('university_requirements_count', 0) }} / 2</span>
                         </div>
                         <div class="summary-item">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>{{ recommendations.semester }} Semester, Year {{ recommendations.academic_year }}</span>
+                            <span>{{ recommendations.get('semester', 'Unknown') }} Semester, Year {{ recommendations.get('academic_year', 'Unknown') }}</span>
                         </div>
                     </div>
                     
