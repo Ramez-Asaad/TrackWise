@@ -1,7 +1,9 @@
-experta
-pandas==2.1.0
-numpy==1.24.3
-Flask==2.3.3
+frozendict==1.2
+experta==1.9.4
+pandas
+numpy
+Flask==2.0.1
+Werkzeug==2.0.1
 gunicorn==21.2.0
-psycopg2-binary==2.9.9
+pymongo[srv]==4.6.1
 python-dotenv==1.0.0 

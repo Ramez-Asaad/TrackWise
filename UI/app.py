@@ -21,6 +21,9 @@ app.register_blueprint(kbsystem_bp)
 app.register_blueprint(inference_engine_bp)
 app.register_blueprint(gpa_calculator_bp)
 
+# Vercel requires the app to be named 'app'
+app = app
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port) 
