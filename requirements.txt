@@ -1,5 +1,5 @@
 frozendict==1.2
-experta==1.9.4
+experta
 pandas
 numpy
 Flask==2.0.1
