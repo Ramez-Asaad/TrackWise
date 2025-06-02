@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "TrackWise",
+			"path": ".."
+		},
+		{
+			"name": "templates",
+			"path": "../../UI/UI/UI/templates"
+		}
+	],
+	"settings": {}
+}

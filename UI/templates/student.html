@@ -42,46 +42,45 @@
         
         <!-- Legacy Form (Hidden by default) -->
         <div id="legacy-form" style="display: none;">
-            <form method="POST" action="/student_kbs">
-                <div class="input-field">
-                    <label for="semester">Current Semester</label>
-                    <select id="semester" name="semester" required>
-                        <option value="" disabled selected>Choose your current semester</option>
-                        <option value="Fall">Fall</option>
-                        <option value="Spring">Spring</option>
-                        <option value="Summer">Summer</option>
-                    </select>
-                </div>
-                <div class="input-field">
-                    <label for="cgpa">CGPA</label>
-                    <input type="number" step="0.01" name="cgpa" id="cgpa" placeholder="Enter your CGPA" required>
-                </div>
-                <div class="input-field">
-                    <label for="completed_courses">Passed Courses</label>
-                    <select id="completed_courses" name="completed_courses" multiple>
-                        {% for course in courses %}
-                            <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="input-field">
-                    <label for="failed_courses">Failed Courses</label>
-                    <select id="failed_courses" name="failed_courses" multiple>
-                        {% for course in courses %}
-                            <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <button type="submit" class="button">Get Recommendations</button>
-            </form>
-            
-            <div id="policy-feedback">
-                {% if policy_feedback %}
-                    <h3>Policy Feedback & Recommendations:</h3>
-                    <pre>{{ policy_feedback }}</pre>
-                {% endif %}
+        <form method="POST" action="/student_kbs">
+            <div class="input-field">
+                <label for="semester">Current Semester</label>
+                <select id="semester" name="semester" required>
+                    <option value="" disabled selected>Choose your current semester</option>
+                    <option value="Fall">Fall</option>
+                    <option value="Spring">Spring</option>
+                </select>
             </div>
+            <div class="input-field">
+                <label for="cgpa">CGPA</label>
+                <input type="number" step="0.01" name="cgpa" id="cgpa" placeholder="Enter your CGPA" required>
+            </div>
+            <div class="input-field">
+                <label for="completed_courses">Passed Courses</label>
+                <select id="completed_courses" name="completed_courses" multiple>
+                    {% for course in courses %}
+                        <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-field">
+                <label for="failed_courses">Failed Courses</label>
+                <select id="failed_courses" name="failed_courses" multiple>
+                    {% for course in courses %}
+                        <option value="{{ course.course_code }}">{{ course.course_code }} - {{ course.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="button">Get Recommendations</button>
+        </form>
+            
+        <div id="policy-feedback">
+            {% if policy_feedback %}
+                <h3>Policy Feedback & Recommendations:</h3>
+                <pre>{{ policy_feedback }}</pre>
+            {% endif %}
         </div>
+    </div>
     </div>
     
     <!-- Choices.js JS -->
@@ -90,18 +89,18 @@
         // Initialize Choices.js only when the legacy form is visible
         function initializeChoices() {
             if (document.getElementById('completed_courses')) {
-                new Choices('#completed_courses', {
-                    removeItemButton: true,
-                    placeholder: true,
-                    placeholderValue: 'Choose your Passed Courses'
-                });
+        new Choices('#completed_courses', {
+            removeItemButton: true,
+            placeholder: true,
+            placeholderValue: 'Choose your Passed Courses'
+        });
             }
             if (document.getElementById('failed_courses')) {
-                new Choices('#failed_courses', {
-                    removeItemButton: true,
-                    placeholder: true,
-                    placeholderValue: 'Choose your Failed Courses'
-                });
+        new Choices('#failed_courses', {
+            removeItemButton: true,
+            placeholder: true,
+            placeholderValue: 'Choose your Failed Courses'
+        });
             }
         }
         
