@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from DB import user_exists, create_user, check_user_credentials
-from KBSystem import run_kbsystem_for_student, load_courses_from_csv
+from UI.DB import user_exists, create_user, check_user_credentials
+from UI.KBSystem import run_kbsystem_for_student, load_courses_from_csv
 
 client_bp = Blueprint('client', __name__)
 

@@ -1,9 +1,9 @@
 from flask import Flask
-from Client import client_bp
-from KBEditor import kbeditor_bp
-from KBSystem import kbsystem_bp
-from inference_engine import inference_engine_bp
-from gpa_calculator import gpa_calculator_bp
+from UI.Client import client_bp
+from UI.KBEditor import kbeditor_bp
+from UI.KBSystem import kbsystem_bp
+from UI.inference_engine import inference_engine_bp
+from UI.gpa_calculator import gpa_calculator_bp
 from DB import init_db
 import os
 
