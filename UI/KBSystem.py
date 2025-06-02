@@ -1,6 +1,6 @@
 import sys
 import os
-from experta_patch import patch_experta
+from UI.experta_patch import patch_experta
 
 # Apply our patch before importing experta
 patch_experta()
