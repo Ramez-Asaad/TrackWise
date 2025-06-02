@@ -31,7 +31,7 @@ def gpa_calculator():
     if request.method == 'GET':
         # Load courses for the form
         try:
-            courses = load_courses_from_csv('Data.csv')
+            courses = load_courses_from_csv()
         except:
             courses = []
         return render_template('gpa_calculator.html', courses=courses, grade_points=GRADE_POINTS)
@@ -59,7 +59,7 @@ def gpa_calculator():
             
             # Load courses for credit hour lookup
             try:
-                courses = load_courses_from_csv('Data.csv')
+                courses = load_courses_from_csv()
                 course_lookup = {course['course_code']: course for course in courses}
             except:
                 course_lookup = {}
@@ -97,7 +97,7 @@ def gpa_calculator():
             
             # Load courses for the form again
             try:
-                courses = load_courses_from_csv('Data.csv')
+                courses = load_courses_from_csv()
             except:
                 courses = []
             
@@ -114,7 +114,7 @@ def gpa_calculator():
         except Exception as e:
             flash(f"Error calculating GPA: {str(e)}", "error")
             try:
-                courses = load_courses_from_csv('Data.csv')
+                courses = load_courses_from_csv()
             except:
                 courses = []
             return render_template('gpa_calculator.html', courses=courses, grade_points=GRADE_POINTS)

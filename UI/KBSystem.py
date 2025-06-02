@@ -3,6 +3,7 @@ import csv
 import io
 import os
 from flask import Blueprint, render_template, request
+from UI.course_db import get_all_courses
 
 kbsystem_bp = Blueprint('kbsystem', __name__)
 
@@ -55,25 +56,19 @@ class KBSystem(KnowledgeEngine):
         self.output.append(f"Cannot register for {code}: missing prerequisites {missing}")
 
 
-def load_courses_from_csv(csv_path):
-    # Always resolve the path relative to this file's directory
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    full_path = os.path.join(base_dir, csv_path)
+def load_courses_from_csv(csv_path=None):
+    """Load courses from database"""
     courses = []
-    with open(full_path, newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            prereqs = [p.strip() for p in row['prerequisites'].split(',')] if row['prerequisites'] else []
-            coreqs = [c.strip() for c in row['corequisites'].split(',')] if row['corequisites'] else []
-            courses.append(Course(
-                course_code=row['course_code'],
-                course_name=row['course_name'],
-                description=row['description'],
-                prerequisites=prereqs,
-                corequisites=coreqs,
-                credit_hours=int(row['credit_hours']),
-                semester_offered=row['semester_offered']
-            ))
+    for row in get_all_courses():
+        courses.append(Course(
+            course_code=row['course_code'],
+            course_name=row['course_name'],
+            description=row['description'],
+            prerequisites=row['prerequisites'],
+            corequisites=row['corequisites'],
+            credit_hours=row['credit_hours'],
+            semester_offered=row['semester_offered']
+        ))
     return courses
 
 def run_kbsystem_for_student(cgpa, current_credits, completed_courses, failed_courses, csv_path='Data.csv'):

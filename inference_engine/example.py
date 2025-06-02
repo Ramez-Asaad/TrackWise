@@ -6,12 +6,11 @@ def main():
     passed_courses = ['CSE014', 'CSE015', 'MAT111', 'MAT112']
     failed_courses = ['CSE111']
     current_semester = 'Spring'
-    csv_path = 'UI/Data.csv'
 
     # Load and print available courses
     print("\nAvailable Courses:")
     print("-----------------")
-    courses = load_courses_from_csv(csv_path)
+    courses = load_courses_from_csv()
     for course in courses:
         print(f"{course['course_code']}: {course['course_name']} ({course['semester_offered']})")
 
@@ -29,7 +28,7 @@ def main():
         passed_courses=passed_courses,
         failed_courses=failed_courses,
         current_semester=current_semester,
-        csv_path=csv_path
+        csv_path=None
     )
 
     # Print recommendations

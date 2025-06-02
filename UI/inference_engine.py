@@ -14,7 +14,7 @@ def course_recommendations():
     """Main route for course recommendations"""
     if request.method == 'GET':
         # Load courses for the form
-        courses = load_courses_from_csv('Data.csv')
+        courses = load_courses_from_csv()
         return render_template('course_recommendations.html', courses=courses)
     
     elif request.method == 'POST':
@@ -34,12 +34,12 @@ def course_recommendations():
                 passed_courses=passed_courses,
                 failed_courses=failed_courses,
                 current_semester=current_semester,
-                csv_path='Data.csv',
+                csv_path=None,
                 academic_year=academic_year
             )
             
             # Load all courses for display
-            courses = load_courses_from_csv('Data.csv')
+            courses = load_courses_from_csv()
             
             return render_template('course_recommendations.html', 
                                  courses=courses,
@@ -54,7 +54,7 @@ def course_recommendations():
         
         except Exception as e:
             flash(f"Error generating recommendations: {str(e)}", "error")
-            courses = load_courses_from_csv('Data.csv')
+            courses = load_courses_from_csv()
             return render_template('course_recommendations.html', courses=courses)
 
 @inference_engine_bp.route('/api/recommendations', methods=['POST'])
@@ -68,7 +68,7 @@ def api_recommendations():
             passed_courses=data['passed_courses'],
             failed_courses=data['failed_courses'],
             current_semester=data['current_semester'],
-            csv_path='Data.csv',
+            csv_path=None,
             academic_year=data.get('academic_year')  # Optional parameter
         )
         

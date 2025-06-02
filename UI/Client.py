@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from UI.DB import user_exists, create_user, check_user_credentials
 from UI.KBSystem import run_kbsystem_for_student, load_courses_from_csv
+from UI.course_db import get_all_courses
 
 client_bp = Blueprint('client', __name__)
 
@@ -76,7 +77,7 @@ def admin_index():
 # Placeholder for student dashboard
 @client_bp.route('/student_dashboard')
 def student_dashboard():
-    courses = load_courses_from_csv('Data.csv')
+    courses = get_all_courses()
     return render_template('student.html', courses=courses)
 
 # Route to process student KBS form
